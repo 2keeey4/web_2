@@ -5,78 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Книжный магазин</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
     <div class="container">
         <h2>Добавить книгу</h2>
-        
-        <form id="bookForm">
-            <label>Название книги:</label>
-            <input type="text" name="title" required>
-
-            <label>Автор:</label>
-            <input type="text" name="author" required>
-            <label>Год издания:</label>
-            <select name="year" required>
-                <?php
-                $currentYear = date("Y");
-                for ($year = $currentYear; $year >= 1900; $year--) {
-                    echo "<option value='$year'>$year</option>";
-                }
-                ?>
-            </select>
-
-
-            <label>Жанр:</label>
-            <input type="text" name="genre" required>
-
-            <label>Цена (₽):</label>
-            <input type="number" name="price" min="1" step="0.01" required>
-
-            <label>Формат книги:</label>
-            <select name="format" required>
-                <option value="Твердый переплет">Твердый переплет</option>
-                <option value="Мягкий переплет">Мягкий переплет</option>
-                <option value="Электронная">Электронная</option>
-                <option value="Аудиокнига">Аудиокнига</option>
-            </select>
-
-            <button type="submit">Добавить</button>
+        <form action="form.php" method="post">
+            <label for="title">Название книги:</label>
+            <input type="text" id="title" name="title" required>
+            
+            <label for="author">Автор:</label>
+            <input type="text" id="author" name="author" required>
+            
+            <label for="year">Год издания:</label>
+            <input type="number" id="year" name="year" min="1500" max="2025" step="1" required>
+            
+            <label for="genre">Жанр:</label>
+            <input type="text" id="genre" name="genre" required>
+            
+            <label for="price">Цена (руб.):</label>
+            <input type="number" step="0.1" id="price" name="price" required>
+            
+            <input type="submit" value="Добавить">
         </form>
-
         <h2>Список книг</h2>
-        <table id="booksTable">
+        <table>
             <tr>
                 <th>Название</th>
                 <th>Автор</th>
                 <th>Год</th>
                 <th>Жанр</th>
+                <th>Цена (руб.)</th>
             </tr>
+            <?php
+            if (($handle = fopen("books.csv", "r")) !== FALSE) {
+                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                    echo "<tr><td>" . implode("</td><td>", $data) . "</td></tr>";
+                }
+                fclose($handle);
+            }
+            ?>
         </table>
     </div>
-    <script>
-        $(document).ready(function () {
-            function loadBooks() {
-                $.get("form.php", function (data) {
-                    $("#booksTable").html(data);
-                });
-            }
-
-            loadBooks();
-
-            $("#bookForm").submit(function (event) {
-                event.preventDefault(); 
-
-                $.post("form.php", $(this).serialize(), function (response) {
-                    alert(response); 
-                    $("#bookForm")[0].reset();  
-                    loadBooks();  
-                });
-            });
-        });
-    </script>
-
 </body>
 </html>
