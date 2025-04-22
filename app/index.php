@@ -1,10 +1,14 @@
+<?php
+$pdo = new PDO('mysql:host=db;dbname=mydb', 'user', 'pass');
+
+$books = $pdo->query("SELECT * FROM books")->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Книжный магазин</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=<?= time() ?>">
 </head>
 <body>
     <div class="container">
@@ -12,21 +16,25 @@
         <form action="form.php" method="post" onsubmit="return validateForm()">
             <label for="title">Название книги:</label>
             <input type="text" id="title" name="title" required>
-            
+
             <label for="author">Автор:</label>
             <input type="text" id="author" name="author" required>
-            
+
             <label for="year">Год издания:</label>
-            <input type="number" id="year" name="year" min="1500" max="2025" step="1" required>
-            
+            <input type="number" id="year" name="year" min="1500" max="2025" required>
+
             <label for="genre">Жанр:</label>
             <input type="text" id="genre" name="genre" required>
-            
+
             <label for="price">Цена (руб.):</label>
-            <input type="number" step="0.1" id="price" name="price" required>
-            
+            <input type="number" step="0.01" id="price" name="price" required>
+
+            <label for="quantity">Количество:</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+
             <input type="submit" value="Добавить">
         </form>
+
         <h2>Список книг</h2>
         <table>
             <tr>
@@ -35,48 +43,47 @@
                 <th>Год</th>
                 <th>Жанр</th>
                 <th>Цена (руб.)</th>
+                <th>Количество</th>
             </tr>
-            <?php
-            if (($handle = fopen("books.csv", "r")) !== FALSE) {
-                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                    echo "<tr><td>" . implode("</td><td>", $data) . "</td></tr>";
-                }
-                fclose($handle);
-            }
-            ?>
+            <?php foreach ($books as $book): ?>
+                <tr>
+                    <td><?= htmlspecialchars($book['title']) ?></td>
+                    <td><?= htmlspecialchars($book['author']) ?></td>
+                    <td><?= $book['year'] ?></td>
+                    <td><?= htmlspecialchars($book['genre']) ?></td>
+                    <td><?= $book['price'] ?></td>
+                    <td><?= $book['quantity'] ?></td>
+                </tr>
+            <?php endforeach; ?>
         </table>
     </div>
+
     <script>
-        function validateForm() {
+    function validateForm() {
         const title = document.getElementById('title').value;
         const author = document.getElementById('author').value;
         const genre = document.getElementById('genre').value;
 
-        if (title.length > 100 || author.length > 100 || genre.length > 100) {
-            alert('Поля "Название книги", "Автор" и "Жанр" не могут быть длиннее 100 символов.');
+        if ([title, author, genre].some(x => x.length < 2 || x.length > 100)) {
+            alert('Поля "Название", "Автор" и "Жанр" должны содержать от 2 до 100 символов.');
             return false;
         }
 
         const tagPattern = /<[^>]*>/;
-        if (tagPattern.test(title) || tagPattern.test(author) || tagPattern.test(genre)) {
+        if ([title, author, genre].some(x => tagPattern.test(x))) {
             alert('Поля не могут содержать HTML-теги.');
             return false;
         }
 
         const digitPattern = /\d{3,}/;
-        if (digitPattern.test(title) || digitPattern.test(author) || digitPattern.test(genre)) {
+        if ([title, author, genre].some(x => digitPattern.test(x))) {
             alert('Поля не могут содержать много цифр.');
             return false;
         }
 
-        if (title.length < 2 || author.length < 2 || genre.length < 2) {
-            alert('Поля должны содержать минимум 2 символа.');
-            return false;
-        }
-
         const specialCharPattern = /[&<>"'`]/;
-        if (specialCharPattern.test(title) || specialCharPattern.test(author) || specialCharPattern.test(genre)) {
-            alert('Поля не могут содержать специальные символы, такие как &, <, >, ", \', `.');
+        if ([title, author, genre].some(x => specialCharPattern.test(x))) {
+            alert('Поля не могут содержать спецсимволы.');
             return false;
         }
 

@@ -16,7 +16,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DB: mydb
+      MYSQL_DATABASE: mydb
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
     volumes:
