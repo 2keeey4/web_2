@@ -1,0 +1,20 @@
+<head>
+    <link rel="stylesheet" href="style.css?v=<?= time() ?>">
+</head>
+<div class="container">
+    <h2>Оформить заказ</h2>
+    <form method="post" action="?route=order/submit">
+        <input type="text" name="full_name" placeholder="ФИО" required>
+        <input type="text" name="phone" placeholder="Телефон" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <select name="book_id" required>
+            {% for book in books %}
+                <option value="{{ book.id }}" {{ book.quantity == 0 ? 'disabled style="color:red;"' : '' }}>
+                    {{ book.title }} {{ book.quantity == 0 ? '(нет в наличии)' : '' }}
+                </option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Купить">
+    </form>
+    <a href="/">Назад</a>
+</div>

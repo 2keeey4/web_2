@@ -1,0 +1,33 @@
+<head>
+    <link rel="stylesheet" href="style.css?v=<?= time() ?>">
+</head>
+<div class="container">
+    <h2>Добавить книгу</h2>
+    <form method="post" action="?route=book/add">
+        <input type="text" name="title" placeholder="Название" required>
+        <input type="text" name="author" placeholder="Автор" required>
+        <input type="number" name="year" placeholder="Год" required>
+        <input type="text" name="genre" placeholder="Жанр" required>
+        <input type="number" name="price" placeholder="Цена" required>
+        <input type="number" name="quantity" placeholder="Количество" required>
+        <input type="submit" value="Добавить">
+    </form>
+
+    <h2>Список книг</h2>
+    <table>
+        <tr>
+            <th>Название</th><th>Автор</th><th>Год</th><th>Жанр</th><th>Цена</th><th>Количество</th>
+        </tr>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.year }}</td>
+                <td>{{ book.genre }}</td>
+                <td>{{ book.price }}</td>
+                <td>{{ book.quantity }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="?route=order">Оформить заказ</a>
+</div>
