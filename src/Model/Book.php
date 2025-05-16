@@ -2,11 +2,22 @@
 
 namespace App\Model;
 
+use PDO;
 use App\Core\db;
 
 class Book {
-    public static function getAll() {
-        return db::connect()->query("SELECT * FROM books")->fetchAll();
+    public static function getAll($search = '') {
+        $query = "SELECT * FROM books";
+        if ($search) {
+            $query .= " WHERE title LIKE :search OR author LIKE :search OR genre LIKE :search";
+        }
+        $stmt = db::connect()->prepare($query);
+        if ($search) {
+            $searchTerm = "%$search%";
+            $stmt->bindParam(':search', $searchTerm, PDO::PARAM_STR);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     public static function validate($data) {

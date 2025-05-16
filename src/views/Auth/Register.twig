@@ -1,0 +1,28 @@
+<head>
+    <link rel="stylesheet" href="style.css?v=<?= time() ?>">
+</head>
+<div class="container">
+    <h2>Регистрация</h2>
+    
+    {% if message %}
+        <div class="message">{{ message }}</div>
+    {% endif %}
+    
+    {% if errors %}
+        <div class="errors">
+            {% for error in errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <form method="post" action="?route=register/submit">
+        <input type="text" name="username" placeholder="Имя пользователя" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Пароль" required>
+        <input type="password" name="password_confirm" placeholder="Подтвердите пароль" required>
+        <input type="submit" value="Зарегистрироваться">
+    </form>
+    
+    <p>Уже есть аккаунт? <a href="?route=login">Войти</a></p>
+</div>

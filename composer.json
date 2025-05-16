@@ -1,11 +1,14 @@
 {
-    "require": {
+  "require": {
+      "mpdf/mpdf": "^8.2",
       "twig/twig": "^3.0"
-    },
-    "autoload": {
+  },
+  "autoload": {
       "psr-4": {
-        "App\\": "src/"
+          "App\\": "src/"
       }
-    }
+  },
+  "config": {
+      "platform-check": false
   }
-  
+}

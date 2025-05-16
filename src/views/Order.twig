@@ -2,11 +2,20 @@
     <link rel="stylesheet" href="style.css?v=<?= time() ?>">
 </head>
 <div class="container">
+    <div class="user-panel">
+        {% if user %}
+            Привет, {{ user.username }} ({{ user.role }})
+            <a href="?route=logout">Выйти</a>
+        {% else %}
+            <a href="?route=login">Войти</a> | <a href="?route=register">Регистрация</a>
+        {% endif %}
+    </div>
+
     <h2>Оформить заказ</h2>
     <form method="post" action="?route=order/submit">
-        <input type="text" name="full_name" placeholder="ФИО" required>
+        <input type="text" name="full_name" placeholder="ФИО" required value="{{ user.username }}">
         <input type="text" name="phone" placeholder="Телефон" required>
-        <input type="email" name="email" placeholder="Email" required>
+        <input type="email" name="email" placeholder="Email" required value="{{ user.email }}">
         <select name="book_id" required>
             {% for book in books %}
                 <option value="{{ book.id }}" {{ book.quantity == 0 ? 'disabled style="color:red;"' : '' }}>

@@ -2,18 +2,34 @@
     <link rel="stylesheet" href="style.css?v=<?= time() ?>">
 </head>
 <div class="container">
-    <h2>Добавить книгу</h2>
-    <form method="post" action="?route=book/add">
-        <input type="text" name="title" placeholder="Название" required>
-        <input type="text" name="author" placeholder="Автор" required>
-        <input type="number" name="year" placeholder="Год" required>
-        <input type="text" name="genre" placeholder="Жанр" required>
-        <input type="number" name="price" placeholder="Цена" required>
-        <input type="number" name="quantity" placeholder="Количество" required>
-        <input type="submit" value="Добавить">
-    </form>
+    <div class="user-panel">
+        {% if user %}
+            Привет, {{ user.username }} ({{ user.role }})
+            <a href="?route=logout">Выйти</a>
+        {% else %}
+            <a href="?route=login">Войти</a> | <a href="?route=register">Регистрация</a>
+        {% endif %}
+    </div>
+
+    {% if is_admin %}
+        <h2>Добавить книгу</h2>
+        <form method="post" action="?route=book/add">
+            <input type="text" name="title" placeholder="Название" required>
+            <input type="text" name="author" placeholder="Автор" required>
+            <input type="number" name="year" placeholder="Год" required>
+            <input type="text" name="genre" placeholder="Жанр" required>
+            <input type="number" name="price" placeholder="Цена" required>
+            <input type="number" name="quantity" placeholder="Количество" required>
+            <input type="submit" value="Добавить">
+        </form>
+    {% endif %}
 
     <h2>Список книг</h2>
+    <form method="get">
+        <input type="text" name="search" placeholder="Поиск по названию, автору или жанру" value="{{ search }}">
+        <input type="submit" value="Найти">
+    </form>
+    
     <table>
         <tr>
             <th>Название</th><th>Автор</th><th>Год</th><th>Жанр</th><th>Цена</th><th>Количество</th>
@@ -29,5 +45,14 @@
             </tr>
         {% endfor %}
     </table>
-    <a href="?route=order">Оформить заказ</a>
+    <div class="report-actions">
+    <h3>Скачать отчет:</h3>
+        <a href="?route=report/pdf" class="btn btn-pdf">PDF</a>
+        <a href="?route=report/excel" class="btn btn-excel">Excel</a>
+        <a href="?route=report/csv" class="btn btn-csv">CSV</a>
+    </div>
+    
+    {% if not is_admin %}
+        <a href="?route=order">Оформить заказ</a>
+    {% endif %}
 </div>
