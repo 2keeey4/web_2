@@ -1,0 +1,14 @@
+security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: auto
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: user_login
+
+    firewalls:
+        main:
+            lazy: true

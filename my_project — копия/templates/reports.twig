@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="/css/style.css">
+<h1>Заказать книгу</h1>
+<form method="POST" action="{{ path('order_store') }}">
+    <input type="text" name="customer_name" placeholder="Ваше имя" required>
+    <input type="email" name="customer_email" placeholder="Ваш email" required>
+    
+    <select name="book_id" required>
+        <option value="">Выберите книгу</option>
+        {% for book in available_books %}
+            <option value="{{ book.id }}" {% if book.quantity <= 0 %}disabled style="color: red;"{% endif %}>
+                {{ book.BookTitle }} ({{ book.BookAuthor}}) - {{ book.BookPrice }} руб. 
+                {% if book.Quantity <= 0 %}(Нет в наличии){% else %}(В наличии: {{ book.Quantity }}){% endif %}
+            </option>
+        {% endfor %}
+    </select>
+    
+    <button type="submit">Заказать</button>
+</form>
+
+<a href="{{ path('book_export_pdf') }}">Скачать PDF</a>
+<a href="{{ path('book_export_csv') }}">Скачать CSV</a>
+<a href="{{ path('book_export_xlsx') }}">Скачать XLSX</a>
+
+<a href="/logout">Выйти</a>

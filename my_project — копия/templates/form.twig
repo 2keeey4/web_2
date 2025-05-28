@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="/css/style.css">
+<h1>Добавить книгу</h1>
+<form method="POST" action="{{ path('book_store') }}">
+    <input type="text" name="book_title" placeholder="Название книги" required>
+    <input type="text" name="book_genre" placeholder="Жанр книги" required>
+    <input type="text" name="book_author" placeholder="Автор книги" required>
+    <input type="number" name="book_price" placeholder="Цена (рубли)" required min="1" max="5000">
+    <input type="number" name="quantity" placeholder="Количество" required min="1">
+    <button type="submit">Сохранить</button>
+</form>
+
+<h2>Каталог книг</h2>
+<form method="GET" action="{{ path('admin_book') }}">
+    <input type="text" name="filter" value="{{ filter }}" placeholder="Фильтр по названию или жанру">
+    <button type="submit">Фильтровать</button>
+</form>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название книги</th>
+            <th>Жанр книги</th>
+            <th>Автор книги</th>
+            <th>Цена (рубли)</th>
+            <th>Количество</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.id }}</td>
+                <td>{{ book.BookTitle  }}</td>
+                <td>{{ book.BookGenre }}</td>
+                <td>{{ book.BookAuthor }}</td>
+                <td>{{ book.BookPrice }}</td>
+                <td>{{ book.Quantity }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Нет данных для отображения.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ path('book_export_pdf') }}">Скачать PDF</a>
+<a href="{{ path('book_export_csv') }}">Скачать CSV</a>
+<a href="{{ path('book_export_xlsx') }}">Скачать XLSX</a>
+
+<a href="{{ path('logout') }}">Выйти</a>

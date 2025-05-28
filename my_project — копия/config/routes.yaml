@@ -1,0 +1,76 @@
+# config/routes.yaml
+
+# Стартовая страница (например, форма входа)
+home:
+  path: /
+  controller: App\Controller\AuthController::loginForm
+
+# Аутентификация
+login_form:
+  path: /login
+  controller: App\Controller\AuthController::loginForm
+  methods: [GET]
+
+login:
+  path: /login
+  controller: App\Controller\AuthController::login
+  methods: [POST]
+
+logout:
+  path: /logout
+  controller: App\Controller\AuthController::logout
+  methods: [GET]
+
+# Регистрация
+register_form:
+  path: /register
+  controller: App\Controller\AuthController::registerForm
+  methods: [GET]
+
+register:
+  path: /register
+  controller: App\Controller\AuthController::register
+  methods: [POST]
+
+# Страница для администратора (ввод данных меню)
+admin_book:
+  path: /admin/book
+  controller: App\Controller\BookController::adminBook
+  methods: [GET]
+
+book_store:
+  path: /admin/book/store
+  controller: App\Controller\BookController::store
+  methods: [POST]
+
+book_index:
+  path: /admin/book/index
+  controller: App\Controller\BookController::index
+  methods: [GET]
+
+# Экспорт отчетов
+book_export_pdf:
+  path: /admin/export/pdf
+  controller: App\Controller\BookController::exportPdf
+  methods: [GET]
+
+book_export_csv:
+  path: /admin/export/csv
+  controller: App\Controller\BookController::exportCsv
+  methods: [GET]
+
+book_export_xlsx:
+  path: /admin/export/xlsx
+  controller: App\Controller\BookController::exportXlsx
+  methods: [GET]
+
+# Отчеты пользователя
+user_reports:
+  path: /user/reports
+  controller: App\Controller\BookController::userReports
+  methods: [ GET]
+
+order_store:
+  path: /user/order_store
+  controller: App\Controller\BookController::orderStore
+  methods: [POST]
